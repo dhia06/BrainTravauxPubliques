@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from './user.repository';
+
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import { UsersController } from 'src/users/users.controller';
-import { UserService } from 'src/services/user/user.service';
+import { UserRepository } from 'src/signin/user.repository';
+import { AuthService } from 'src/signin/auth.service';
+import { UserService } from 'src/signup/user.service';
+import { UsersController } from 'src/signup/users.controller';
+import { AuthController } from 'src/signin/auth.controller';
+//import { AuthclientModule } from './authclient/authclient.module';
+//import { ClientController } from './client/client.controller';
+
 
 @Module({
   imports: [
@@ -18,11 +23,12 @@ import { UserService } from 'src/services/user/user.service';
           expiresIn: 3600,
         },
       },
-    ),
-  
+    ), 
     PassportModule.register({ defaultStrategy: 'jwt' },
     ),
     TypeOrmModule.forFeature([UserRepository]),
+    //AuthclientModule,
+    
   ],
   providers: [
     AuthService,
@@ -34,7 +40,7 @@ import { UserService } from 'src/services/user/user.service';
     JwtStrategy,
     PassportModule
   ],
-  controllers: [AuthController,UsersController],
+  controllers: [AuthController,UsersController, ],
 })
 
 

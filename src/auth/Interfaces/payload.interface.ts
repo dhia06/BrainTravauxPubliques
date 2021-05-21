@@ -1,3 +1,6 @@
 export interface PayloadInterface {
-  accessToken: string
+  accessToken: string;
+  role: string;
+  firstname: string;
+  lastname: string ;
 }
