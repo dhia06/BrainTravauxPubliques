@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
+
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { User } from './Model/user.entity';
-import { UsersController } from './signup/users.controller';
-import { UserService } from './signup/user.service';
+import { UserP } from './Model/user.entity';
+import { UsersController } from './Authentification/SignUp/users.controller';
+import { UserService } from './Authentification/SignUp/user.service';
 //import { FacebookStrategy } from "./facebook.strategy";
 //import { GammeModule } from './gamme/gamme.module';
 import { GameModule } from './game/game.module';
@@ -17,10 +17,28 @@ import { ServicessModule } from './servicess/servicess.module';
 import { TaskModule } from './task/task.module';
 import { TaskdModule } from './taskd/taskd.module';
 import { ArticleModule } from './article/article.module';
-import { LoggerModule } from './logger/logger.module';
+import { LoggerModule } from './Authentification/logger/logger.module';
 import { ProjetModule } from './projet/projet.module';
-//import { UserModule } from './user/user.module';
+import { PrestationModule } from './Seconddb/prestation/prestation/prestation.module';
+import { PiecesModule } from './Seconddb/pieces/pieces/pieces.module';
+import { TypesModule } from './Seconddb/Types/types/types.module';
+import { AccessiresModule } from './Seconddb/accessoires/accessires/accessires.module';
+import { GammesModule } from './Seconddb/Gammes/gammes/gammes.module';
+// import { AuthController } from './auth/auth.controller';
 
+import { UserModule } from './user/user.module';
+import { AccessoiresProjetModule } from './AccessoiresProjet/AccessoiresProjet.module';
+
+// import { AuthModule } from './auth/auth.module';
+import { LoginModule } from './login/login.module';
+import { DisponibiliteModule } from './disponibilite/disponibilite.module';
+import { RdvModule } from './rdv/rdv.module';
+import { PieceProjetModule } from './PieceProjet/PieceProjet.module';
+import { AuthModule } from './Authentification/signin/auth.module';
+import { AvoirModule } from './avoir/avoir.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { PusherModule } from './pusher/pusher.module';
+import { UserEntity } from './entities/user.entity';
 
 
 @Module({
@@ -34,9 +52,12 @@ import { ProjetModule } from './projet/projet.module';
     synchronize: true,
   }
   ),
-  AuthModule,
+   AuthModule,  
+
  
-  TypeOrmModule.forFeature([User]),
+  TypeOrmModule.forFeature([UserP]),
+  TypeOrmModule.forFeature([UserEntity]),
+  // TypeOrmModule.forFeature([Avoir]),
     MailerModule.forRoot({
       transport: {
         host: 'localhost',
@@ -73,14 +94,21 @@ import { ProjetModule } from './projet/projet.module';
         },
       },
     }),
-  
+    
+    PieceProjetModule,
+    AccessoiresProjetModule,
     GameModule,
   LoggerModule,
   ProjetModule,
+
     ServicessModule,
-  
-  
+    GammesModule,
+    PrestationModule,
+    PiecesModule,
+    TypesModule,
+    AccessiresModule,
     TaskModule,
+     AvoirModule,
   
   
     TaskdModule,
@@ -89,13 +117,29 @@ import { ProjetModule } from './projet/projet.module';
     ArticleModule,
   
   
-    LoggerModule,
-  
   
     ProjetModule,
   
   
-   // UserModule,
+    UserModule,
+  
+  
+    LoginModule,
+  
+  
+    DisponibiliteModule,
+  
+  
+    RdvModule,
+  
+  
+    NotificationsModule,
+  
+  
+    PusherModule,
+
+
+  
   
 
 

@@ -1,48 +1,39 @@
 import { Module } from '@nestjs/common';
-
-import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
-import { UserRepository } from 'src/signin/user.repository';
-import { AuthService } from 'src/signin/auth.service';
-import { UserService } from 'src/signup/user.service';
-import { UsersController } from 'src/signup/users.controller';
-import { AuthController } from 'src/signin/auth.controller';
-//import { AuthclientModule } from './authclient/authclient.module';
-//import { ClientController } from './client/client.controller';
+import { UserModule } from 'src/user/user.module';
+import { JwtStrategy } from 'src/Authentification/jwt.strategy';
+import { AuthController } from 'src/Authentification/signin/auth.controller';
+import { AuthService } from 'src/Authentification/signin/auth.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserPrRepository } from 'src/Authentification/logger/UserPr.repository';
+import { UserPRepository } from 'src/Authentification/signin/user.repository';
 
 
-@Module({
-  imports: [
-    JwtModule.register(
-      {
-        secret: 'aSecretToken',
+@Module({  
+  imports: [    
+      UserModule,    
+      PassportModule.register({
+          defaultStrategy: 'jwt',
+          property: 'user',
+          session: false,
+      }),
+      TypeOrmModule.forFeature([UserPrRepository]),
+  
+      // TypeOrmModule.forFeature([UserPRepository]),
+      JwtModule.register({
+        secret:   "dhiasecretkey",
         signOptions: {
-          expiresIn: 3600,
-        },
-      },
-    ), 
-    PassportModule.register({ defaultStrategy: 'jwt' },
-    ),
-    TypeOrmModule.forFeature([UserRepository]),
-    //AuthclientModule,
-    
-  ],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    UserService
-   
-  ],
+          expiresIn: 3600
+          },
+      }),
+  ], 
+  controllers: [AuthController],  
+  providers: [AuthService, JwtStrategy],  
   exports: [
-    JwtStrategy,
-    PassportModule
+      PassportModule,
+      JwtStrategy,
+      AuthService
   ],
-  controllers: [AuthController,UsersController, ],
 })
-
-
-export class AuthModule {
-}
+export class AuthModule {}

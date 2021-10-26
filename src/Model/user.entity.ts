@@ -2,29 +2,21 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique }
 import * as Bcrypt from 'bcrypt';
 
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { Role } from 'src/auth/DTO/role';
+import { Role } from 'src/entities/role';
+import { UserPr } from './UserPr.entity';
+import { Avoir } from 'src/entities/avoir.entity';
 
-@Entity()
-@Unique(['email'])
+@Entity('professionnel')
+// @Unique(['email'])
 
-export class User extends BaseEntity {
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  email: string;
+export class UserP extends UserPr {
 
   @Column({
-    default: 1
+    default: 'non'
   })
-  salt: string;
 
-  @Column({
-    default:'non'})
+  confirmed: string;
 
-  confirmed:string;
- 
   @Column({
 
     default: 'en attente'
@@ -33,32 +25,15 @@ export class User extends BaseEntity {
 
 
 
-  @Column()
-  password: string;
+
+  // @Column()
+  // plainTextPassword: string;
+
 
   @Column()
-  plainTextPassword: string;
+  role: Role.professionnel;
 
-  @Column({
-    // type: 'enum',
-    // enum: Role,
-    default: "professionnel"
-  })
-  role: string;
-  @Column()
-  address: string;
 
-  @Column()
-  firstname: string;
-
-  @Column()
-  lastname: string;
-
-  @Column()
-  number: string;
-
-  @Column()
-  datedenaissance: Date;
   @Column()
   registration: number;
   @Column()
@@ -70,8 +45,11 @@ export class User extends BaseEntity {
 
 
 
+  @OneToMany(() => Avoir, Avoir => Avoir.UserP)
+  Avoir: Avoir[];
+
   public async verifyPassword(password) {
     const hashedPassword = await Bcrypt.hash(password, 10);
-    return hashedPassword === password;
+    return hashedPassword ;
   }
 }

@@ -1,19 +1,16 @@
-// import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty } from "class-validator";
+import { Role } from "src/entities/role";
 
-// export class UserDto {  
-//     @IsNotEmpty()  
-//     id: string;
-//     @IsNotEmpty()  
-//     username: string;
-//     @IsNotEmpty()  
-//     @IsEmail()  
-//     email: string;
-//     @IsNotEmpty()
-//     phonenumber: string;
-//     @IsNotEmpty()
-//     role: string;
-//     @IsNotEmpty()
-//     //salt: string;
-//     @IsNotEmpty()
-//     password:string
-// }
+export class UserDto {  
+    
+    @IsNotEmpty()  
+    username: string;
+    @IsNotEmpty()  
+    @IsEmail()  
+    email: string;
+    @IsNotEmpty()
+    number: string;
+    role?:Role.client
+    
+    
+}

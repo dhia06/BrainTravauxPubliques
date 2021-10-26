@@ -1,36 +1,56 @@
-// import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-// import * as bcrypt from 'bcrypt';
+import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import * as bcrypt from 'bcrypt';
+import { Role } from "./role";
+import { Rdv } from "./Rdv.entity";
+import { Projet } from "src/Model/projet.entity";
+import { UserPr } from "src/Model/UserPr.entity";
 
-// @Entity('user')
-// export class UserEntity {  
-//     @PrimaryGeneratedColumn('uuid') id: string;  
-//     @Column({ 
-//         type: 'varchar', 
-//         // nullable: false, 
-//         unique: true 
-//     }) 
-//     username: string;
-//     @Column({ 
+
+@Entity('client')
+export class UserEntity extends UserPr
+{  
+
+    @Column()
+    username: string;
+    @Column({ 
+        type: 'varchar', 
+        nullable: false 
+    }) 
+    password: string; 
+
+
+//  @Column({ 
 //         type: 'varchar', 
 //         nullable: false 
 //     }) 
-//     password: string;  @Column({ 
-//         type: 'varchar', 
-//         nullable: false 
-//     }) 
-//     @Column()
-//     phonenumber :string;
-//     @Column()
-//     email: string;
-//     // @Column()
-//     // salt: string;
-//     // @Column({
-//     //     type: 'enum',
-//     //     enum: UserRoleEnum,
-//     //     default: UserRoleEnum.USER
-//     //   })
-//     //   role: string;
-//     // @BeforeInsert()  async hashPassword() {
-//     //     this.password = await bcrypt.hash(this.password, this.salt);  
-//     // }
-// }
+
+
+    @Column()
+    number :string="";
+    
+    @Column()
+    email: string;
+    @Column()
+  role: Role.client;
+
+   @Column()
+   plainTextPassword:string;
+
+  
+    // @BeforeInsert()  async hashPassword() {
+    //     this.password = await bcrypt.hash(this.password, 12);  
+    // }
+
+
+    @OneToMany(() => Rdv, Rdv => Rdv.UserEntity)
+    public Rdv!: Rdv[];
+
+
+    @OneToMany(() => Projet, Projet => Projet.UserEntity)
+    public Projet!: Projet[];
+
+
+    @BeforeInsert()  async hashPassword() {
+        this.password = await bcrypt.hash(this.password, 12);  
+    }
+}

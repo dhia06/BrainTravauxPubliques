@@ -1,73 +1,60 @@
-// import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { compare } from 'bcrypt';
-// import { UserEntity } from 'src/entities/user.entity';
-// import { Repository } from 'typeorm';
-// import { CreateUserDto } from './dto/CreateUser.dto';
-// import { LoginUserDto } from './dto/LoginUser.dto';
-// import { UserDto } from './dto/User.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { compare } from 'bcrypt';
+import { UserEntity } from 'src/entities/user.entity';
+import { UserPr } from 'src/Model/UserPr.entity';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/CreateUser.dto';
 
-// @Injectable()
+import { UserDto } from './dto/User.dto';
 
-
-// export class UserService {
-//     constructor( 
-//       @InjectRepository(UserEntity)  
-//        private readonly userRepo: Repository<UserEntity>) {} 
+@Injectable()
 
 
-        
-//         async findOne(options?: object): Promise<UserDto> {
-//             const user =  await this.userRepo.findOne(options);    
-//             return (user);  
-//         }
-//         async findByLogin(loginUserDto: LoginUserDto): Promise<UserDto> {  
-//           //  console.log("loginUserDto"+JSON.stringify(loginUserDto.username))  
-//           let username = loginUserDto.username
-//             const user = await this.userRepo.findOne({ where: { username} });
-            
-//             if (!user) {
-//                 throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);    
-//             }
-            
-//             //compare passwords  
-        
-//         //     const areEqual = await compare(user.password, loginUserDto.password);
-//         //     console.log(user.password);
-//         //     console.log(loginUserDto.password);
-//         //     console.log('===>',areEqual);
-//         //     if (!areEqual) {
-//         //         throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);    
-//         //     }
-            
-//            return (user);  
-//          }
-//          async update(id:string , data):Promise<any>{
-//             return await this.userRepo.update(id,data);
-//              }
-        
-//         async findByPayload({ username }: any): Promise<UserDto> {
-//             return await this.findOne({ 
-//                 where:  { username } });  
-//         }
-//         async create(userDto: CreateUserDto): Promise<UserDto> {    
-//             const {phonenumber, username, password, email } = userDto;
-            
-//             // check if the user exists in the db    
-//             const userInDb = await this.userRepo.findOne({ 
-//                 where: { username } 
-//             });
-//             if (userInDb) {
-//                 throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);    
-//             }
-            
-//             const user: UserEntity = await this.userRepo.create({ username, password, email,phonenumber });
-//             await this.userRepo.save(user);
-//             return (user);  
-//         }
-        
-        
-        
+export class UserService {
+    constructor(
+        @InjectRepository(UserPr)
+        private readonly userRepoo: Repository<UserPr>,
+        @InjectRepository(UserEntity)
+        private readonly userRepo: Repository<UserEntity>) { }
+
+    async findOne(options?: object): Promise<UserDto> {
+        const user = await this.userRepo.findOne(options);
+        return (user);
+    }
+
+
+
+
+    async findByPayload({ username }: any): Promise<UserDto> {
+        return await this.findOne({
+            where: { username }
+        });
+    }
+
+
+    async create(userDto: CreateUserDto): Promise<any> {
+        const { username, password, email, number, role } = userDto;
+        const userInDb = await this.userRepo.findOne({
+            where: { username: username }
+        });
+        if (userInDb) {
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+        }
+        else {
+            const user: any = await this.userRepo.create(userDto);
+            return await this.userRepo.save(userDto);
+        }
+    }
+
+
+
+
+    async createe(usa: UserPr): Promise<any> {
+        await this.userRepoo.create(usa);
+        return await this.userRepoo.save(usa);
+
+    }
 
 
 
@@ -88,4 +75,6 @@
 
 
 
-// }
+
+
+}

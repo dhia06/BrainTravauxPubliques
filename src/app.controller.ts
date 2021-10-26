@@ -2,7 +2,6 @@ import { Controller, Get, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AppService } from './app.service';
 import { Request } from 'express';
-import { RolesGuard } from './auth/roles.guard';
 
 
 

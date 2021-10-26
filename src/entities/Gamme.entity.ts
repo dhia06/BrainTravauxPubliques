@@ -1,7 +1,6 @@
 
 import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
 
-
 @Entity()
 export class GammeEntity  {
   @PrimaryGeneratedColumn()
@@ -9,6 +8,7 @@ export class GammeEntity  {
 
   @Column()
   name: string;
+  
     
   
   

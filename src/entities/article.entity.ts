@@ -1,41 +1,56 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from 'typeorm';
-import { TaskdEntity } from './taskd.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { accessoires } from "./accessoires_vue.entity";
+import { Avoir } from "./avoir.entity";
+import { TaskdEntity } from "./taskd.entity";
+
 
 @Entity()
 export class ArticleEntity  {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
   
-  @Column()
-  image: string;
+  @Column({default:"image.jpg"})
+  image!: string;
 
-  @Column()
-  unite: string;
+  @Column({default:"unité d ouvrage"})
+  unite!: string;
   
-  @Column()
-  prix: string;
+  // @Column()
+  // prix!: string;
 
   @Column()
-  travdetid: number;
-
-
+  travdetid!: number;
   @ManyToOne(type => TaskdEntity, 
     (TaskdEntity) => TaskdEntity.ArticleEntity,
     {
       onDelete:'CASCADE',
       onUpdate:'CASCADE',
-     // eager:true,
+   //  eager:true,
       
         //les traveaux peuvent etre vides
-      nullable:true,
+     nullable:true   
     }    )  
     @JoinColumn(
     {name:"travdetid"}   )
     
     TaskdEntity:TaskdEntity[];
+     
+ 
+  
+  // @OneToMany(() => Avoir, Avoir => Avoir.articleentity)
+  // public Avoir: Avoir[];
+
+
+  @OneToOne(() => accessoires, accessoires => accessoires.ArticleEntity) // specify inverse side as a second parameter
+  accessoires: accessoires[];
+
+
+
+    }
+
+
 
  
-}

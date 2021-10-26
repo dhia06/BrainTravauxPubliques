@@ -20,7 +20,7 @@ export class TaskdEntity  {
   @ManyToOne(type => TaskEntity, 
     (TaskEntity) => TaskEntity.TaskdEntity,
     {
-      
+    //  eager:true,
      //  onDelete:'CASCADE',
       onUpdate:'CASCADE',
         //les traveaux peuvent etre vides
